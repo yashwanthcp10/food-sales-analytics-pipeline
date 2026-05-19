@@ -1,0 +1,24 @@
+project:
+  name: food-sales-analytics-pipeline
+  environment: dev
+
+paths:
+  incoming_folder: data/incoming
+  processed_folder: data/processed
+  archive_folder: data/archive
+  bad_files_folder: data/bad_files
+  logs_folder: logs
+
+gcp:
+  project_id: food-sales-analytics
+
+  buckets:
+    raw: gcs-food-sales-raw-prod
+    processed: gcs-food-sales-processed-prod
+    archive: gcs-food-sales-archive-prod
+
+bigquery:
+  dataset: food_sales
+
+logging:
+  level: INFO

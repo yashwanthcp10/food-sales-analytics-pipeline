@@ -1,0 +1,10 @@
+pandas
+openpyxl
+google-cloud-storage
+google-cloud-bigquery
+pyspark
+pyyaml
+tenacity
+watchdog
+pytest
+python-dotenv
