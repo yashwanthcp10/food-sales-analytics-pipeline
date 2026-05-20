@@ -10,9 +10,6 @@ REQUIRED_COLUMNS = [
 
 
 def validate_schema(df):
-    """
-    Validate required columns.
-    """
 
     missing_columns = [
         col for col in REQUIRED_COLUMNS
@@ -22,6 +19,37 @@ def validate_schema(df):
     if missing_columns:
         raise ValueError(
             f"Missing columns: {missing_columns}"
+        )
+
+    return True
+
+
+def validate_nulls(df):
+
+    critical_columns = [
+        "Order_ID",
+        "Sales_Amount"
+    ]
+
+    for col in critical_columns:
+
+        if df[col].isnull().sum() > 0:
+
+            raise ValueError(
+                f"Null values found in {col}"
+            )
+
+    return True
+
+
+def validate_duplicates(df):
+
+    duplicate_count = df.duplicated().sum()
+
+    if duplicate_count > 0:
+
+        raise ValueError(
+            f"Duplicate rows found: {duplicate_count}"
         )
 
     return True
