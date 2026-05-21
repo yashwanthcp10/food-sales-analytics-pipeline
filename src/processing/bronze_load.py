@@ -1,21 +1,43 @@
+import pandas as pd
+
 from google.cloud import bigquery
-from datetime import datetime
-import uuid
+
+from src.utils.logger import setup_logger
+from src.utils.helpers import (
+    current_timestamp,
+    generate_batch_id
+)
+
+logger = setup_logger()
 
 
-def load_dataframe_to_bigquery(
-    dataframe,
-    table_id
+def load_bronze_layer(
+    file_path
 ):
-    """
-    Load dataframe into BigQuery.
-    """
+
+    dataframe = pd.read_excel(
+        file_path
+    )
+
+    dataframe["load_timestamp"] = (
+        current_timestamp()
+    )
+
+    dataframe["batch_id"] = (
+        generate_batch_id()
+    )
+
+    dataframe["source_file"] = (
+        file_path
+    )
 
     client = bigquery.Client()
 
-    dataframe["load_timestamp"] = datetime.now()
-
-    dataframe["batch_id"] = str(uuid.uuid4())
+    table_id = (
+        "food-sales-analytics-prod"
+        ".food_sales"
+        ".bronze_orders"
+    )
 
     job = client.load_table_from_dataframe(
         dataframe,
@@ -24,4 +46,6 @@ def load_dataframe_to_bigquery(
 
     job.result()
 
-    return "Load completed"
+    logger.info(
+        "Bronze layer load completed"
+    )
